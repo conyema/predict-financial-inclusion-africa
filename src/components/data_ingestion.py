@@ -1,59 +1,49 @@
 import os
 import sys
-from src.exception import CustomException
-from src.logger import logging
 import pandas as pd
-
-from sklearn.model_selection import train_test_split
 from dataclasses import dataclass
 
+from sklearn.model_selection import train_test_split
 
+from src.exception import CustomException
+from src.logger import logging
+
+
+# All configuration this components(class) requires
 @dataclass
 class DataIngestionConfig:
-    train_data_path: str = os.path.join("artifacts", "train.csv")
-    test_data_path: str = os.path.join("artifacts", "test.csv")
-    raw_data_path: str = os.path.join("artifacts", "data .csv")
+    # train_data_path: str = os.path.join("artifacts", "data", "train.csv")
+    root_dir: str = os.path.join("artifacts", "data")
+    source_data_path: str = "notebook/data/Train.csv"
 
 
 class DataIngestion:
     def __init__(self):
-        self.ingestion_config = DataIngestionConfig()
+        self.config = DataIngestionConfig()
 
     def get_data(self):
-        logging.info("Data ingestion component/method")
 
         try:
             # Get the raw data
-            df = pd.read_csv("notebook\data\Train.csv")
+            data = pd.read_csv(self.config.source_data_path)
+
             logging.info("Dataset obtained as a dataframe")
 
+            # Create directory if it doesn't exist
+            os.makedirs(self.config.root_dir, exist_ok=True)
+
             # Save data as CSV
-            os.makedirs(os.path.dirname(
-                self.ingestion_config.train_data_path), exist_ok=True)
-            df.to_csv(self.ingestion_config.raw_data_path,
-                      header=True, index=False)
-            logging.info("Raw data saved and data splitting initiated")
+            data.to_csv(
+                os.path.join(self.config.root_dir, "dataset.csv"),
+                header=True,
+                index=False
+            )
 
-            # Split the raw data
-            train_set, test_set = train_test_split(
-                df, test_size=0.2, random_state=1)
+            logging.info(f"Raw dataset saved in {self.config.root_dir}")
 
-            # Save train and test data as CSV
-            train_set.to_csv(
-                self.ingestion_config.train_data_path, header=True, index=False)
-            test_set.to_csv(self.ingestion_config.test_data_path,
-                            header=True, index=False)
-            logging.info("Data ingestion complete")
-
-            return(
-                self.ingestion_config.train_data_path,
-                self.ingestion_config.test_data_path
+            return (
+                self.config.root_dir
             )
 
         except Exception as e:
             raise CustomException(e, sys)
-
-
-if __name__ == "__main__":
-    obj = DataIngestion()
-    obj.get_data()
