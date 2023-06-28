@@ -5,7 +5,8 @@ from typing import List
 # "-e." triggers setup.py from the requirements.txt
 setup_trigger = "-e ."
 
-def get_requirements(file_path:str)->List[str]:
+
+def get_requirements(file_path: str) -> List[str]:
     '''
     Returns a list of required libraries/packages
     '''
@@ -20,8 +21,8 @@ def get_requirements(file_path:str)->List[str]:
         if setup_trigger in requirements:
             requirements.remove(setup_trigger)
 
-
     return requirements
+
 
 setup(
     name='FIAfrica',
@@ -29,5 +30,5 @@ setup(
     author='Conyema',
     author_email='onyemachinedum@gmail.com',
     packages=find_packages(),
-    install_requrires=get_requirements('requirements.txt')
+    requires=get_requirements('requirements.txt')
 )
