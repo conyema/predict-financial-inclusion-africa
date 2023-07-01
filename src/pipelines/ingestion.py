@@ -3,12 +3,15 @@ from src.logger import logging
 
 
 def main():
+    logging.info(">>>>> data ingestion started <<<<<")
+
     # instantiate the ingestor
     data_ingestion = DataIngestion()
 
     # Get the dataset
     data_ingestion.get_data()
-    # data_ingestion.split_data(test_size=0.2)
+
+    logging.info(">>>>> data ingestion completed <<<<<")
 
 
 if __name__ == "__main__":

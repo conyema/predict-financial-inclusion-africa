@@ -1,9 +1,9 @@
-from src.components.data_preprocessing import DataPreprocessor
 from src.components.model_training import ModelTrainer
 from src.logger import logging
 
 
 def main():
+    logging.info(">>>>> model training/development started <<<<<")
 
     # Instantiate the processor
     trainer = ModelTrainer()
@@ -25,6 +25,10 @@ def main():
     # Train optimized models with sampling
     trainer.optimized_train(
         save_best_model=True, save_report=True, report_title='optimized_and_sampled')
+    
+
+    logging.info(">>>>> model training/development completed <<<<<")
+
 
 
 if __name__ == "__main__":

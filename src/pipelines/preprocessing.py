@@ -6,6 +6,8 @@ def main():
     cols_to_drop = ['uniqueid', 'country', 'year', 'bank_account']
     label = 'bank_account'
 
+    logging.info(">>>>> data preprocessing started <<<<<")
+
     # Instantiate the processor
     preprocessor = DataPreprocessor()
 
@@ -21,6 +23,8 @@ def main():
 
     # Save the processed/split and encoded data
     preprocessor.save_instance_data()
+
+    logging.info(">>>>> data preprocessing completed <<<<<")
 
 
 if __name__ == "__main__":
