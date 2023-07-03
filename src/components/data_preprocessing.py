@@ -130,7 +130,7 @@ class DataPreprocessor:
                 include='number').columns
 
             # Convert year type
-            data['year'] = data['year'].astype('object')
+            # data['year'] = data['year'].astype('object')
 
             # Log normalize numerical features
             data[numerical_features] = np.log(
@@ -309,35 +309,3 @@ class DataPreprocessor:
         except Exception as e:
             raise CustomException(e, sys)
 
-    def process_new_data(self, data):
-        pass
-
-        # try:
-        #     # Get encoder
-        #     preprocessor = load_object(self.config.preprocessor_obj_path)
-
-        #     # Transform data
-        #     data_trans = self.transform_data(data)
-
-        #     # Encode data
-        #     data_enc = preprocessor.transform(data_trans)
-
-        #     return data_enc
-
-        # except Exception as e:
-        #     raise CustomException(e, sys)
-
-    # def decode_class(self, data):
-    #     ''' Returns the decoded class label from  '''
-
-    #     try:
-    #         # Get encoder
-    #         label_encoder = load_object(self.config.label_encoder_obj_path)
-
-    #         # Encode data
-    #         class_label = label_encoder.inverse_transform(data)
-
-    #         return class_label
-
-    #     except Exception as e:
-    #         raise CustomException(e, sys)
