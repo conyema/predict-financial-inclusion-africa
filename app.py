@@ -1,27 +1,36 @@
-from flask import Flask, render_template, request, jsonify
+from flask import Flask, request, jsonify, json, make_response
+from flask_cors import CORS, cross_origin
+from werkzeug.exceptions import HTTPException
+
 from src.components.prediction import Predictor, Features
 
 
+# Instantiate API server
 app = Flask(__name__)
 
+# Enable Cross Origin Resource sharing for server
+# CORS(app, supports_credentials=True)
 
+
+# API Routes
 @app.route('/')
 def index():
     return jsonify({"message": "Financial Inclusion Africa API"})
 
 
 @app.route('/predict', methods=['POST'])
+@cross_origin()
 def predict():
     data_obj = Features(
-        location_type=request.json['location_type'],
-        cellphone_access=request.json['cellphone_access'],
-        household_size=request.json['household_size'],
+        location_type=request.json['locationType'],
+        cellphone_access=request.json['cellphoneAccess'],
+        household_size=request.json['householdSize'],
         age=request.json['age'],
         gender=request.json['gender'],
-        relationship_with_head=request.json['relationship_with_head'],
-        marital_status=request.json['marital_status'],
-        education_level=request.json['education_level'],
-        job_type=request.json['job_type']
+        relationship_with_head=request.json['relationshipWithHead'],
+        marital_status=request.json['maritalStatus'],
+        education_level=request.json['educationLevel'],
+        job_type=request.json['jobType']
     )
 
     # print(request.json)
@@ -46,5 +55,31 @@ def predict():
     })
 
 
+# catch every type of exception
+@app.errorhandler(Exception)
+def handle_exception(e):
+    # print(e)
+
+    # Error is a HTTP Exception
+    if isinstance(e, HTTPException):
+        response = e.get_response()
+
+        # response = json.dumps({ "error": e.description })
+        response["message"] = e.description  # type: ignore
+        response["status_code"] = e.code  # type: ignore
+
+    else:
+        # build response
+        response = make_response(
+            jsonify({"message": 'Something went wrong'}), 500)
+
+    # Add the CORS header
+    response.headers['Access-Control-Allow-Origin'] = '*'
+    response.content_type = "application/json"
+
+    return response
+
+
 if __name__ == '__main__':
-    app.run(debug=True)
+    # app.run(debug=True)
+    app.run()
