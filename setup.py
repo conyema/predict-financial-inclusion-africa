@@ -15,6 +15,7 @@ def get_requirements(file_path: str) -> List[str]:
     with open(file_path) as file_obj:
         # Save each line in the requirements list
         requirements = file_obj.readlines()
+
         # Use list comprehension to remove '/n' character
         requirements = [req.replace("\n", "") for req in requirements]
 
@@ -26,9 +27,9 @@ def get_requirements(file_path: str) -> List[str]:
 
 setup(
     name='FIAfrica',
-    version='0.0.1',
+    version='1.0',
     author='Conyema',
     author_email='onyemachinedum@gmail.com',
     packages=find_packages(),
-    requires=get_requirements('requirements.txt')
+    install_requires=get_requirements('requirements.txt')
 )
