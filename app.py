@@ -67,8 +67,10 @@ def handle_exception(e):
         response = e.get_response()
 
         # response = json.dumps({ "error": e.description })
-        response["message"] = e.description  # type: ignore
-        response["status_code"] = e.code  # type: ignore
+        # response["message"] = e.description  # type: ignore
+        # response["status_code"] = e.code  # type: ignore
+        setattr(response, "message", e.description)
+        setattr(response, "status_code", e.code)
 
     else:
         # build response
