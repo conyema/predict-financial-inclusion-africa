@@ -13,24 +13,24 @@ app = Flask(__name__)
 
 
 # API Routes
-@app.route('/')
+@app.route("/")
 def index():
     return jsonify({"message": "Financial Inclusion Africa API"})
 
 
-@app.route('/predict', methods=['POST'])
+@app.route("/predict", methods=["POST"])
 @cross_origin()
 def predict():
     data_obj = Features(
-        location_type=request.json['locationType'],
-        cellphone_access=request.json['cellphoneAccess'],
-        household_size=request.json['householdSize'],
-        age=request.json['age'],
-        gender=request.json['gender'],
-        relationship_with_head=request.json['relationshipWithHead'],
-        marital_status=request.json['maritalStatus'],
-        education_level=request.json['educationLevel'],
-        job_type=request.json['jobType']
+        location_type=request.json["locationType"],
+        cellphone_access=request.json["cellphoneAccess"],
+        household_size=request.json["householdSize"],
+        age=request.json["age"],
+        gender=request.json["gender"],
+        relationship_with_head=request.json["relationshipWithHead"],
+        marital_status=request.json["maritalStatus"],
+        education_level=request.json["educationLevel"],
+        job_type=request.json["jobType"],
     )
 
     # print(request.json)
@@ -40,19 +40,21 @@ def predict():
 
     pred1, pred2, prob1, prob2 = predictor.predict(data_df)
 
-    return jsonify({
-        "message": "success",
-        "data": {
-            "base_model": {
-                "prediction": pred1,
-                "probablity": prob1,
+    return jsonify(
+        {
+            "message": "success",
+            "data": {
+                "base_model": {
+                    "prediction": pred1,
+                    "probablity": prob1,
+                },
+                "opt_model": {
+                    "prediction": pred2,
+                    "probablity": prob2,
+                },
             },
-            "opt_model": {
-                "prediction": pred2,
-                "probablity": prob2,
-            }
         }
-    })
+    )
 
 
 # catch every type of exception
@@ -70,16 +72,15 @@ def handle_exception(e):
 
     else:
         # build response
-        response = make_response(
-            jsonify({"message": 'Something went wrong'}), 500)
+        response = make_response(jsonify({"message": "Something went wrong"}), 500)
 
     # Add the CORS header
-    response.headers['Access-Control-Allow-Origin'] = '*'
+    response.headers["Access-Control-Allow-Origin"] = "*"
     response.content_type = "application/json"
 
     return response
 
 
-if __name__ == '__main__':
+if __name__ == "__main__":
     # app.run(debug=True)
-    app.run()
+    app.run(port=8000)
