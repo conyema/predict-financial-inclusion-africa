@@ -70,7 +70,7 @@ def handle_exception(e):
         # response["message"] = e.description  # type: ignore
         # response["status_code"] = e.code  # type: ignore
         setattr(response, "message", e.description)
-        setattr(response, "status_code", e.code)
+        setattr(response, "status", e.code)
 
     else:
         # build response
